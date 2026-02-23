@@ -4,7 +4,7 @@ This repository contains context files and a PowerShell parser for Artwin widget
 
 ## Source
 
-- Widget URL: https://artwinlive.com/widgets/Msi1GseWOav7x74brmWfWtYp
+- Widget URL: [artwinlive widget](https://artwinlive.com/widgets/Msi1GseWOav7x74brmWfWtYp)
 
 ## Project Structure
 
@@ -31,6 +31,46 @@ Console output only (no exports):
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\parse-artwin-widget.ps1 -NoExport
 ```
+
+## Change Tracking
+
+Track changes between runs (creates snapshot + report in `state/`):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\track-widget-changes.ps1
+```
+
+Fail with exit code `2` when changes are detected:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\track-widget-changes.ps1 -FailOnChange
+```
+
+Optional retention window (days):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\track-widget-changes.ps1 -RetentionDays 30
+```
+
+### Schedule on Windows
+
+Register a repeating scheduled task (default every 60 minutes):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\register-widget-tracker-task.ps1
+```
+
+Custom interval:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\register-widget-tracker-task.ps1 -IntervalMinutes 30
+```
+
+Outputs are written to:
+
+- `state/snapshots/widget-snapshot-YYYYMMDD-HHMMSS.json`
+- `state/reports/change-report-YYYYMMDD-HHMMSS.json`
+- `state/reports/change-report-YYYYMMDD-HHMMSS.md`
 
 ## Context Links
 
