@@ -37,3 +37,4 @@ powershell -ExecutionPolicy Bypass -File .\scripts\parse-artwin-widget.ps1 -NoEx
 - Chat context: [context/chat-context-2026-02-23.md](context/chat-context-2026-02-23.md)
 - Widget source context: [context/widget-source-context.json](context/widget-source-context.json)
 - Source-control best practices: [context/source-control-best-practices.md](context/source-control-best-practices.md)
+- Sample parser output: [context/parser-output-sample.md](context/parser-output-sample.md)
