@@ -1,6 +1,6 @@
 param(
     [Parameter(Mandatory = $false)]
-    [string]$Url = "https://artwinlive.com/widgets/Msi1GseWOav7x74brmWfWtYp",
+    [string]$Url = "",
 
     [Parameter(Mandatory = $false)]
     [string]$StateDir = ".\\state",
@@ -14,6 +14,42 @@ param(
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
+
+$StatusDescriptions = @{
+    0 = 'optie'
+    1 = 'definitief'
+    2 = 'bezet'
+}
+
+function Get-StatusDescription {
+    param(
+        [Parameter(Mandatory = $true)]
+        [int]$Status
+    )
+
+    if ($StatusDescriptions.ContainsKey($Status)) {
+        return $StatusDescriptions[$Status]
+    }
+
+    return 'onbekend'
+}
+
+function Resolve-SourceUrl {
+    param(
+        [Parameter(Mandatory = $false)]
+        [string]$RequestedUrl
+    )
+
+    if (-not [string]::IsNullOrWhiteSpace($RequestedUrl)) {
+        return $RequestedUrl
+    }
+
+    if (-not [string]::IsNullOrWhiteSpace($env:ARTWIN_WIDGET_SOURCE_URL)) {
+        return $env:ARTWIN_WIDGET_SOURCE_URL
+    }
+
+    throw "No source URL configured. Set ARTWIN_WIDGET_SOURCE_URL or pass -Url."
+}
 
 function Get-EmbeddedJsonArray {
     param(
@@ -46,6 +82,7 @@ function Normalize-WidgetItem {
         publish_date      = [string]$Item.publish_date
         change_date       = [string]$Item.change_date
         status            = [int]$Item.status
+        status_description = Get-StatusDescription -Status ([int]$Item.status)
         private           = [int]$Item.private
         title             = [string]$Item.event.title
         venue_name        = [string]$Item.venue.name
@@ -114,7 +151,6 @@ function Write-MarkdownReport {
     $lines += "# Widget Change Report"
     $lines += ""
     $lines += "- Created: $($Report.created_at)"
-    $lines += "- Source: $($Report.source_url)"
     $lines += "- Previous snapshot: $($Report.previous_snapshot)"
     $lines += "- Current snapshot: $($Report.current_snapshot)"
     $lines += ""
@@ -129,7 +165,7 @@ function Write-MarkdownReport {
         $lines += "## Added"
         $lines += ""
         foreach ($item in @($Report.added) | Select-Object -First 20) {
-            $lines += "- $($item.gig_id): $($item.date_start) | $($item.title) | private=$($item.private) status=$($item.status)"
+            $lines += "- $($item.gig_id): $($item.date_start) | $($item.title) | private=$($item.private) status=$($item.status) ($($item.status_description))"
         }
         $lines += ""
     }
@@ -138,7 +174,7 @@ function Write-MarkdownReport {
         $lines += "## Removed"
         $lines += ""
         foreach ($item in @($Report.removed) | Select-Object -First 20) {
-            $lines += "- $($item.gig_id): $($item.date_start) | $($item.title) | private=$($item.private) status=$($item.status)"
+            $lines += "- $($item.gig_id): $($item.date_start) | $($item.title) | private=$($item.private) status=$($item.status) ($($item.status_description))"
         }
         $lines += ""
     }
@@ -158,7 +194,66 @@ function Write-MarkdownReport {
     Set-Content -Path $Path -Value $lines -Encoding UTF8
 }
 
-Write-Host "Fetching widget data from: $Url" -ForegroundColor Cyan
+function Write-MarkdownStatusSummary {
+    param(
+        [Parameter(Mandatory = $true)]
+        [string]$Path,
+
+        [Parameter(Mandatory = $true)]
+        [System.Collections.IEnumerable]$Items,
+
+        [Parameter(Mandatory = $true)]
+        [string]$CreatedAt
+    )
+
+    $statusOrder = @{
+        1 = 0
+        0 = 1
+        2 = 2
+    }
+
+    $orderedItems = @($Items | Sort-Object @{ Expression = { $statusOrder[[int]$_.status] } }, @{ Expression = { [datetime]$_.date_start } }, title)
+
+    $lines = @()
+    $lines += "# Widget Summary (Ordered by Status)"
+    $lines += ""
+    $lines += "- Created: $CreatedAt"
+    $lines += "- Legend: 0=optie, 1=definitief, 2=bezet"
+    $lines += "- Total: $(@($orderedItems).Count)"
+    $lines += ""
+
+    foreach ($status in @(1, 0, 2)) {
+        $statusItems = @($orderedItems | Where-Object { $_.status -eq $status })
+        $label = Get-StatusDescription -Status $status
+        $lines += "## Status $status ($label)"
+        $lines += ""
+
+        if ($statusItems.Count -eq 0) {
+            $lines += "_No events._"
+            $lines += ""
+            continue
+        }
+
+        $lines += "| Start | End | Private | Title | Venue | City | Country | Gig ID |"
+        $lines += "|---|---|---:|---|---|---|---|---|"
+
+        foreach ($item in $statusItems) {
+            $safeTitle = [string]$item.title -replace '\|', '\\|'
+            $safeVenue = [string]$item.venue_name -replace '\|', '\\|'
+            $safeCity = [string]$item.venue_city -replace '\|', '\\|'
+            $safeCountry = [string]$item.venue_country -replace '\|', '\\|'
+            $lines += "| $($item.date_start) | $($item.date_end) | $($item.private) | $safeTitle | $safeVenue | $safeCity | $safeCountry | $($item.gig_id) |"
+        }
+
+        $lines += ""
+    }
+
+    Set-Content -Path $Path -Value $lines -Encoding UTF8
+}
+
+$Url = Resolve-SourceUrl -RequestedUrl $Url
+
+Write-Host "Fetching widget data..." -ForegroundColor Cyan
 $response = Invoke-WebRequest -Uri $Url -UseBasicParsing
 
 $jsonRaw = Get-EmbeddedJsonArray -Html $response.Content
@@ -195,7 +290,6 @@ if ($null -ne $previousSnapshotFile) {
 
 $currentSnapshot = [pscustomobject]@{
     created_at = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
-    source_url = $Url
     item_count = $normalizedItems.Count
     items      = $normalizedItems
 }
@@ -251,7 +345,6 @@ foreach ($gigId in $previousById.Keys) {
 
 $report = [pscustomobject]@{
     created_at        = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
-    source_url        = $Url
     previous_snapshot = $previousSnapshotName
     current_snapshot  = [System.IO.Path]::GetFileName($snapshotPath)
     summary           = [pscustomobject]@{
@@ -266,9 +359,11 @@ $report = [pscustomobject]@{
 
 $reportJsonPath = Join-Path $reportsDir "change-report-$timestamp.json"
 $reportMdPath = Join-Path $reportsDir "change-report-$timestamp.md"
+$statusSummaryPath = Join-Path $reportsDir "status-summary-$timestamp.md"
 
 $report | ConvertTo-Json -Depth 10 | Set-Content -Path $reportJsonPath -Encoding UTF8
 Write-MarkdownReport -Path $reportMdPath -Report $report
+Write-MarkdownStatusSummary -Path $statusSummaryPath -Items $normalizedItems -CreatedAt (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
 
 Write-Host ""
 Write-Host "Change summary" -ForegroundColor Green
@@ -290,6 +385,7 @@ Write-Host "Saved:" -ForegroundColor Cyan
 Write-Host "- Snapshot: $snapshotPath"
 Write-Host "- Report JSON: $reportJsonPath"
 Write-Host "- Report MD: $reportMdPath"
+Write-Host "- Status summary MD: $statusSummaryPath"
 
 if ($RetentionDays -gt 0) {
     $cutoff = (Get-Date).AddDays(-1 * $RetentionDays)

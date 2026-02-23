@@ -6,7 +6,7 @@ param(
     [int]$IntervalMinutes = 60,
 
     [Parameter(Mandatory = $false)]
-    [string]$Url = "https://artwinlive.com/widgets/Msi1GseWOav7x74brmWfWtYp"
+    [string]$Url = ""
 )
 
 Set-StrictMode -Version Latest
@@ -14,6 +14,14 @@ $ErrorActionPreference = 'Stop'
 
 if ($IntervalMinutes -lt 5) {
     throw "IntervalMinutes must be >= 5."
+}
+
+if ([string]::IsNullOrWhiteSpace($Url)) {
+    $Url = $env:ARTWIN_WIDGET_SOURCE_URL
+}
+
+if ([string]::IsNullOrWhiteSpace($Url)) {
+    throw "No source URL configured. Set ARTWIN_WIDGET_SOURCE_URL or pass -Url."
 }
 
 $repoRoot = Split-Path -Parent $PSScriptRoot

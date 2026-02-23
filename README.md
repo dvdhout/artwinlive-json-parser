@@ -4,7 +4,17 @@ This repository contains context files and a PowerShell parser for Artwin widget
 
 ## Source
 
-- Widget URL: [artwinlive widget](https://artwinlive.com/widgets/Msi1GseWOav7x74brmWfWtYp)
+- Configure source URL via environment variable:
+
+```powershell
+$env:ARTWIN_WIDGET_SOURCE_URL = "https://example.com/widgets/<id>"
+```
+
+## Status Legend
+
+- `0` = `optie`
+- `1` = `definitief`
+- `2` = `bezet`
 
 ## Project Structure
 
@@ -20,6 +30,12 @@ Run parser (default URL):
 powershell -ExecutionPolicy Bypass -File .\scripts\parse-artwin-widget.ps1
 ```
 
+Or pass source explicitly (overrides env variable):
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\parse-artwin-widget.ps1 -Url "https://example.com/widgets/<id>"
+```
+
 Public entries only:
 
 ```powershell
@@ -32,12 +48,22 @@ Console output only (no exports):
 powershell -ExecutionPolicy Bypass -File .\scripts\parse-artwin-widget.ps1 -NoExport
 ```
 
+Each parser pass also creates a human-readable markdown summary ordered by status (status `1` first):
+
+- `output/artwin-summary-YYYYMMDD-HHMMSS.md`
+
 ## Change Tracking
 
 Track changes between runs (creates snapshot + report in `state/`):
 
 ```powershell
 powershell -ExecutionPolicy Bypass -File .\scripts\track-widget-changes.ps1
+```
+
+Or pass source explicitly:
+
+```powershell
+powershell -ExecutionPolicy Bypass -File .\scripts\track-widget-changes.ps1 -Url "https://example.com/widgets/<id>"
 ```
 
 Fail with exit code `2` when changes are detected:
@@ -71,6 +97,7 @@ Outputs are written to:
 - `state/snapshots/widget-snapshot-YYYYMMDD-HHMMSS.json`
 - `state/reports/change-report-YYYYMMDD-HHMMSS.json`
 - `state/reports/change-report-YYYYMMDD-HHMMSS.md`
+- `state/reports/status-summary-YYYYMMDD-HHMMSS.md` (ordered by status, with `1` first)
 
 ## Context Links
 
