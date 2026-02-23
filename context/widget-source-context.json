@@ -1,0 +1,23 @@
+{
+  "created_at": "2026-02-23",
+  "source_url": "https://artwinlive.com/widgets/Msi1GseWOav7x74brmWfWtYp",
+  "purpose": "Parse Artwin widget schedule data into readable output",
+  "expected_fields": [
+    "gig_id",
+    "schedule_id",
+    "schedule_name",
+    "date_start",
+    "date_end",
+    "status",
+    "private",
+    "event.title",
+    "venue.name",
+    "venue.city",
+    "venue.country"
+  ],
+  "status_hint": {
+    "0": "tentative/other",
+    "1": "active/public",
+    "2": "blocked/private"
+  }
+}
