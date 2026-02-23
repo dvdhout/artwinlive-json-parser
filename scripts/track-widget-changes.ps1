@@ -225,7 +225,7 @@ function Write-MarkdownStatusSummary {
     foreach ($status in @(1, 0, 2)) {
         $statusItems = @($orderedItems | Where-Object { $_.status -eq $status })
         $label = Get-StatusDescription -Status $status
-        $lines += "## Status $status ($label)"
+        $lines += "## Status $status ($label) - totaal: $($statusItems.Count)"
         $lines += ""
 
         if ($statusItems.Count -eq 0) {
