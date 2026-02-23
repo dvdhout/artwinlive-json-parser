@@ -13,13 +13,13 @@ $env:ARTWIN_WIDGET_SOURCE_URL = "https://example.com/widgets/<id>"
 ## Status Legend
 
 - Default (official Artwin):
-	- `0` = `Tentative`
-	- `1` = `Confirmed`
-	- `2` = `Appointment`
+  - `0` = `Tentative`
+  - `1` = `Confirmed`
+  - `2` = `Appointment`
 - Optional Dutch translation mode:
-	- `0` = `optie`
-	- `1` = `definitief`
-	- `2` = `bezet`
+  - `0` = `optie`
+  - `1` = `definitief`
+  - `2` = `bezet`
 
 ## Provider Semantics (Artwin)
 
@@ -133,3 +133,33 @@ Outputs are written to:
 - Provider notes: [context/provider-artwin-notes.md](context/provider-artwin-notes.md)
 - Source-control best practices: [context/source-control-best-practices.md](context/source-control-best-practices.md)
 - Sample parser output: [context/parser-output-sample.md](context/parser-output-sample.md)
+
+## Cloud Hosting (Option 1: GitHub Actions + Pages)
+
+This project includes a scheduled workflow at [.github/workflows/publish-dashboard.yml](.github/workflows/publish-dashboard.yml).
+
+What it does:
+
+- runs on a schedule (hourly) or manually
+- fetches latest widget data
+- stores history in `site-data/`
+- generates static pages in `docs/`
+- commits and pushes updates automatically
+
+### Required setup
+
+1. In GitHub repository settings, add secret:
+   - `ARTWIN_WIDGET_SOURCE_URL` = your private widget URL
+2. In repository settings, enable GitHub Pages:
+   - Source: `Deploy from a branch`
+   - Branch: `main`
+   - Folder: `/docs`
+
+### Optional setup
+
+- Repository variable `TRANSLATE_STATUS_TO_DUTCH=true` to run automated updates in Dutch labels.
+
+### Web pages
+
+- `docs/index.html` = current summary (status totals + upcoming/active events)
+- `docs/history.html` = history view (past events, removed/cancelled-style events, other changes)
