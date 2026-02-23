@@ -15,9 +15,18 @@
     "venue.city",
     "venue.country"
   ],
-  "status_hint": {
+  "status_hint_provider": {
+    "0": "Tentative",
+    "1": "Confirmed",
+    "2": "Appointment"
+  },
+  "status_hint_optional_translation_nl": {
     "0": "optie",
     "1": "definitief",
     "2": "bezet"
+  },
+  "provider_notes": {
+    "dates": "DateStart/DateEnd are real times; VirtualDate may shift after-midnight gigs to previous day.",
+    "visibility": "Private gigs are not publicly published; publication date controls when public gigs become visible."
   }
 }

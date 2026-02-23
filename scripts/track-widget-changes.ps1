@@ -9,16 +9,101 @@ param(
     [int]$RetentionDays = 90,
 
     [Parameter(Mandatory = $false)]
-    [switch]$FailOnChange
+    [switch]$FailOnChange,
+
+    [Parameter(Mandatory = $false)]
+    [switch]$TranslateStatusToDutch
 )
 
 Set-StrictMode -Version Latest
 $ErrorActionPreference = 'Stop'
 
-$StatusDescriptions = @{
+$StatusDescriptionsOfficial = @{
+    0 = 'Tentative'
+    1 = 'Confirmed'
+    2 = 'Appointment'
+}
+
+$StatusDescriptionsDutch = @{
     0 = 'optie'
     1 = 'definitief'
     2 = 'bezet'
+}
+
+$StatusDescriptions = if ($TranslateStatusToDutch) { $StatusDescriptionsDutch } else { $StatusDescriptionsOfficial }
+
+$Text = if ($TranslateStatusToDutch) {
+    @{
+        ChangeReportTitle = 'Widget wijzigingsrapport'
+        SummaryTitle = 'Samenvatting'
+        Created = 'Aangemaakt'
+        PreviousSnapshot = 'Vorige snapshot'
+        CurrentSnapshot = 'Huidige snapshot'
+        Legend = 'Legenda'
+        Added = 'Toegevoegd'
+        Removed = 'Verwijderd'
+        Changed = 'Gewijzigd'
+        AddedSection = 'Toegevoegd'
+        RemovedSection = 'Verwijderd'
+        ChangedSection = 'Gewijzigd'
+        FieldChanges = 'veldwijziging(en)'
+        StatusSummaryTitle = 'Widgetoverzicht (gesorteerd op status)'
+        Total = 'Totaal'
+        Status = 'Status'
+        TotalInline = 'totaal'
+        NoEvents = '_Geen events._'
+        Start = 'Start'
+        End = 'Einde'
+        Private = 'Prive'
+        Title = 'Titel'
+        Venue = 'Locatie'
+        City = 'Plaats'
+        Country = 'Land'
+        GigId = 'Gig ID'
+        ConsoleChangeSummary = 'Wijzigingsoverzicht'
+        ChangedItems = 'Gewijzigde items (eerste 10):'
+        Saved = 'Opgeslagen:'
+        Snapshot = 'Snapshot'
+        ReportJson = 'Rapport JSON'
+        ReportMd = 'Rapport MD'
+        StatusSummaryMd = 'Statusoverzicht MD'
+    }
+} else {
+    @{
+        ChangeReportTitle = 'Widget Change Report'
+        SummaryTitle = 'Summary'
+        Created = 'Created'
+        PreviousSnapshot = 'Previous snapshot'
+        CurrentSnapshot = 'Current snapshot'
+        Legend = 'Legend'
+        Added = 'Added'
+        Removed = 'Removed'
+        Changed = 'Changed'
+        AddedSection = 'Added'
+        RemovedSection = 'Removed'
+        ChangedSection = 'Changed'
+        FieldChanges = 'field change(s)'
+        StatusSummaryTitle = 'Widget Summary (Ordered by Status)'
+        Total = 'Total'
+        Status = 'Status'
+        TotalInline = 'total'
+        NoEvents = '_No events._'
+        Start = 'Start'
+        End = 'End'
+        Private = 'Private'
+        Title = 'Title'
+        Venue = 'Venue'
+        City = 'City'
+        Country = 'Country'
+        GigId = 'Gig ID'
+        ConsoleChangeSummary = 'Change summary'
+        ChangedItems = 'Changed items (first 10):'
+        Saved = 'Saved:'
+        Snapshot = 'Snapshot'
+        ReportJson = 'Report JSON'
+        ReportMd = 'Report MD'
+        StatusSummaryMd = 'Status summary MD'
+    }
 }
 
 function Get-StatusDescription {
@@ -32,6 +117,15 @@ function Get-StatusDescription {
     }
 
     return 'onbekend'
+}
+
+function Get-StatusLegendString {
+    $parts = @()
+    foreach ($status in @(0, 1, 2)) {
+        $parts += "$status=$((Get-StatusDescription -Status $status))"
+    }
+
+    return ($parts -join ', ')
 }
 
 function Resolve-SourceUrl {
@@ -148,21 +242,22 @@ function Write-MarkdownReport {
     )
 
     $lines = @()
-    $lines += "# Widget Change Report"
+    $lines += "# $($Text.ChangeReportTitle)"
     $lines += ""
-    $lines += "- Created: $($Report.created_at)"
-    $lines += "- Previous snapshot: $($Report.previous_snapshot)"
-    $lines += "- Current snapshot: $($Report.current_snapshot)"
+    $lines += "- $($Text.Created): $($Report.created_at)"
+    $lines += "- $($Text.PreviousSnapshot): $($Report.previous_snapshot)"
+    $lines += "- $($Text.CurrentSnapshot): $($Report.current_snapshot)"
     $lines += ""
-    $lines += "## Summary"
+    $lines += "## $($Text.SummaryTitle)"
     $lines += ""
-    $lines += "- Added: $($Report.summary.added)"
-    $lines += "- Removed: $($Report.summary.removed)"
-    $lines += "- Changed: $($Report.summary.changed)"
+    $lines += "- $($Text.Legend): $($Report.legend)"
+    $lines += "- $($Text.Added): $($Report.summary.added)"
+    $lines += "- $($Text.Removed): $($Report.summary.removed)"
+    $lines += "- $($Text.Changed): $($Report.summary.changed)"
     $lines += ""
 
     if (@($Report.added).Count -gt 0) {
-        $lines += "## Added"
+        $lines += "## $($Text.AddedSection)"
         $lines += ""
         foreach ($item in @($Report.added) | Select-Object -First 20) {
             $lines += "- $($item.gig_id): $($item.date_start) | $($item.title) | private=$($item.private) status=$($item.status) ($($item.status_description))"
@@ -171,7 +266,7 @@ function Write-MarkdownReport {
     }
 
     if (@($Report.removed).Count -gt 0) {
-        $lines += "## Removed"
+        $lines += "## $($Text.RemovedSection)"
         $lines += ""
         foreach ($item in @($Report.removed) | Select-Object -First 20) {
             $lines += "- $($item.gig_id): $($item.date_start) | $($item.title) | private=$($item.private) status=$($item.status) ($($item.status_description))"
@@ -180,10 +275,10 @@ function Write-MarkdownReport {
     }
 
     if (@($Report.changed).Count -gt 0) {
-        $lines += "## Changed"
+        $lines += "## $($Text.ChangedSection)"
         $lines += ""
         foreach ($change in @($Report.changed) | Select-Object -First 20) {
-            $lines += "- $($change.gig_id): $($change.change_count) field change(s)"
+            $lines += "- $($change.gig_id): $($change.change_count) $($Text.FieldChanges)"
             foreach ($diff in $change.diffs) {
                 $lines += "  - $($diff.field): '$($diff.old)' -> '$($diff.new)'"
             }
@@ -203,7 +298,10 @@ function Write-MarkdownStatusSummary {
         [System.Collections.IEnumerable]$Items,
 
         [Parameter(Mandatory = $true)]
-        [string]$CreatedAt
+        [string]$CreatedAt,
+
+        [Parameter(Mandatory = $true)]
+        [string]$Legend
     )
 
     $statusOrder = @{
@@ -215,26 +313,26 @@ function Write-MarkdownStatusSummary {
     $orderedItems = @($Items | Sort-Object @{ Expression = { $statusOrder[[int]$_.status] } }, @{ Expression = { [datetime]$_.date_start } }, title)
 
     $lines = @()
-    $lines += "# Widget Summary (Ordered by Status)"
+    $lines += "# $($Text.StatusSummaryTitle)"
     $lines += ""
-    $lines += "- Created: $CreatedAt"
-    $lines += "- Legend: 0=optie, 1=definitief, 2=bezet"
-    $lines += "- Total: $(@($orderedItems).Count)"
+    $lines += "- $($Text.Created): $CreatedAt"
+    $lines += "- $($Text.Legend): $Legend"
+    $lines += "- $($Text.Total): $(@($orderedItems).Count)"
     $lines += ""
 
     foreach ($status in @(1, 0, 2)) {
         $statusItems = @($orderedItems | Where-Object { $_.status -eq $status })
         $label = Get-StatusDescription -Status $status
-        $lines += "## Status $status ($label) - totaal: $($statusItems.Count)"
+        $lines += "## $($Text.Status) $status ($label) - $($Text.TotalInline): $($statusItems.Count)"
         $lines += ""
 
         if ($statusItems.Count -eq 0) {
-            $lines += "_No events._"
+            $lines += $Text.NoEvents
             $lines += ""
             continue
         }
 
-        $lines += "| Start | End | Private | Title | Venue | City | Country | Gig ID |"
+        $lines += "| $($Text.Start) | $($Text.End) | $($Text.Private) | $($Text.Title) | $($Text.Venue) | $($Text.City) | $($Text.Country) | $($Text.GigId) |"
         $lines += "|---|---|---:|---|---|---|---|---|"
 
         foreach ($item in $statusItems) {
@@ -347,6 +445,7 @@ $report = [pscustomobject]@{
     created_at        = (Get-Date).ToString("yyyy-MM-dd HH:mm:ss")
     previous_snapshot = $previousSnapshotName
     current_snapshot  = [System.IO.Path]::GetFileName($snapshotPath)
+    legend            = (Get-StatusLegendString)
     summary           = [pscustomobject]@{
         added   = $added.Count
         removed = $removed.Count
@@ -363,29 +462,29 @@ $statusSummaryPath = Join-Path $reportsDir "status-summary-$timestamp.md"
 
 $report | ConvertTo-Json -Depth 10 | Set-Content -Path $reportJsonPath -Encoding UTF8
 Write-MarkdownReport -Path $reportMdPath -Report $report
-Write-MarkdownStatusSummary -Path $statusSummaryPath -Items $normalizedItems -CreatedAt (Get-Date -Format "yyyy-MM-dd HH:mm:ss")
+Write-MarkdownStatusSummary -Path $statusSummaryPath -Items $normalizedItems -CreatedAt (Get-Date -Format "yyyy-MM-dd HH:mm:ss") -Legend (Get-StatusLegendString)
 
 Write-Host ""
-Write-Host "Change summary" -ForegroundColor Green
+Write-Host $Text.ConsoleChangeSummary -ForegroundColor Green
 Write-Host "--------------"
-Write-Host "Added   : $($report.summary.added)"
-Write-Host "Removed : $($report.summary.removed)"
-Write-Host "Changed : $($report.summary.changed)"
+Write-Host "$($Text.Added)   : $($report.summary.added)"
+Write-Host "$($Text.Removed) : $($report.summary.removed)"
+Write-Host "$($Text.Changed) : $($report.summary.changed)"
 
 if ($report.summary.changed -gt 0) {
     Write-Host ""
-    Write-Host "Changed items (first 10):" -ForegroundColor Yellow
+    Write-Host $Text.ChangedItems -ForegroundColor Yellow
     $report.changed |
         Select-Object -First 10 gig_id, date_start, title, change_count |
         Format-Table -AutoSize
 }
 
 Write-Host ""
-Write-Host "Saved:" -ForegroundColor Cyan
-Write-Host "- Snapshot: $snapshotPath"
-Write-Host "- Report JSON: $reportJsonPath"
-Write-Host "- Report MD: $reportMdPath"
-Write-Host "- Status summary MD: $statusSummaryPath"
+Write-Host $Text.Saved -ForegroundColor Cyan
+Write-Host "- $($Text.Snapshot): $snapshotPath"
+Write-Host "- $($Text.ReportJson): $reportJsonPath"
+Write-Host "- $($Text.ReportMd): $reportMdPath"
+Write-Host "- $($Text.StatusSummaryMd): $statusSummaryPath"
 
 if ($RetentionDays -gt 0) {
     $cutoff = (Get-Date).AddDays(-1 * $RetentionDays)
