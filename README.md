@@ -163,4 +163,3 @@ What it does:
 
 - `docs/index.html` = current summary (status totals + upcoming/active events)
 - `docs/history.html` = history view (past events, removed/cancelled-style events, other changes)
-- Default visibility in web pages: only non-private events with status `0` (option/tentative) or `1` (confirmed).

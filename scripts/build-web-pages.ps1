@@ -52,19 +52,6 @@ function Status-Order {
     }
 }
 
-function Is-PublicOptionOrConfirmed {
-  param(
-    [Parameter(Mandatory = $true)]
-    $Item
-  )
-
-  $status = [int]$Item.status
-  $isPublic = [int]$Item.private -eq 0
-  $isOptionOrConfirmed = ($status -eq 0 -or $status -eq 1)
-
-  return ($isPublic -and $isOptionOrConfirmed)
-}
-
 function Build-Style {
     return @"
 <style>
@@ -177,11 +164,7 @@ if ($snapshotFiles.Count -eq 0) {
 
 $latestSnapshotFile = $snapshotFiles[-1]
 $latestSnapshot = Get-Content -Path $latestSnapshotFile.FullName -Raw | ConvertFrom-Json
-$items = @($latestSnapshot.items | Where-Object { Is-PublicOptionOrConfirmed -Item $_ })
-$visibleByGigId = @{}
-foreach ($item in $items) {
-  $visibleByGigId[[string]$item.gig_id] = $true
-}
+$items = @($latestSnapshot.items)
 
 $now = Get-Date
 $upcoming = @($items | Where-Object {
@@ -227,7 +210,7 @@ $indexHtml = @"
   <p class="meta">Generated: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') | <a href="history.html">View history</a></p>
 
   <div class="card">
-    <strong>Total visible items:</strong> $($items.Count)<br/>
+    <strong>Total items:</strong> $($items.Count)<br/>
     <strong>Legend:</strong> $(HtmlEncode($latestLegend))
   </div>
 
@@ -269,10 +252,6 @@ foreach ($reportFile in $reportFiles) {
     $reportCreated = [string]$reportObj.created_at
 
     foreach ($removed in @($reportObj.removed)) {
-      if (-not (Is-PublicOptionOrConfirmed -Item $removed)) {
-        continue
-      }
-
         $removedRows += [pscustomobject]@{
             report_created = $reportCreated
             gig_id         = [string]$removed.gig_id
@@ -283,10 +262,6 @@ foreach ($reportFile in $reportFiles) {
     }
 
     foreach ($added in @($reportObj.added)) {
-      if (-not (Is-PublicOptionOrConfirmed -Item $added)) {
-        continue
-      }
-
         $otherChangeRows += [pscustomobject]@{
             report_created = $reportCreated
             gig_id         = [string]$added.gig_id
@@ -297,10 +272,6 @@ foreach ($reportFile in $reportFiles) {
     }
 
     foreach ($changed in @($reportObj.changed)) {
-      if (-not $visibleByGigId.ContainsKey([string]$changed.gig_id)) {
-        continue
-      }
-
         $details = "changed fields: " + [string]$changed.change_count
         $otherChangeRows += [pscustomobject]@{
             report_created = $reportCreated
