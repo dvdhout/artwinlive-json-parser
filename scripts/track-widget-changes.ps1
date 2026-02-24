@@ -148,10 +148,29 @@ function Resolve-SourceUrl {
 function Get-EmbeddedJsonArray {
     param(
         [Parameter(Mandatory = $true)]
-        [string]$Html
+        $Html
     )
 
-    $match = [regex]::Match($Html, '\[(?:.|\r|\n)*\]')
+    $htmlText = $null
+
+    if ($Html -is [string]) {
+        $htmlText = $Html
+    }
+    elseif ($Html -is [byte[]]) {
+        $htmlText = [System.Text.Encoding]::UTF8.GetString($Html)
+    }
+    elseif ($Html -is [System.Array]) {
+        $htmlText = ($Html | ForEach-Object { [string]$_ }) -join [Environment]::NewLine
+    }
+    elseif ($null -ne $Html) {
+        $htmlText = [string]$Html
+    }
+
+    if ([string]::IsNullOrWhiteSpace($htmlText)) {
+        throw "Could not read HTML page content as text."
+    }
+
+    $match = [regex]::Match($htmlText, '\[(?:.|\r|\n)*\]')
     if (-not $match.Success) {
         throw "Could not find embedded JSON array in page content."
     }
