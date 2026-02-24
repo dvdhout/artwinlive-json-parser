@@ -52,6 +52,19 @@ function Status-Order {
     }
 }
 
+function Is-PublicOptionOrConfirmed {
+  param(
+    [Parameter(Mandatory = $true)]
+    $Item
+  )
+
+  $status = [int]$Item.status
+  $isPublic = [int]$Item.private -eq 0
+  $isOptionOrConfirmed = ($status -eq 0 -or $status -eq 1)
+
+  return ($isPublic -and $isOptionOrConfirmed)
+}
+
 function Build-Style {
     return @"
 <style>
@@ -164,7 +177,11 @@ if ($snapshotFiles.Count -eq 0) {
 
 $latestSnapshotFile = $snapshotFiles[-1]
 $latestSnapshot = Get-Content -Path $latestSnapshotFile.FullName -Raw | ConvertFrom-Json
-$items = @($latestSnapshot.items)
+$items = @($latestSnapshot.items | Where-Object { Is-PublicOptionOrConfirmed -Item $_ })
+$visibleByGigId = @{}
+foreach ($item in $items) {
+  $visibleByGigId[[string]$item.gig_id] = $true
+}
 
 $now = Get-Date
 $upcoming = @($items | Where-Object {
@@ -181,11 +198,19 @@ $statusCountRows = Build-StatusCountRows -Items $items
 $upcomingRows = Build-EventRows -Items $upcoming -Max 300
 $pastRows = Build-EventRows -Items $past -Max 500
 
-$latestLegend = if ([string]::IsNullOrWhiteSpace([string]$latestSnapshot.items[0].status_description)) { '' } else {
-    $desc0 = @($items | Where-Object { [int]$_.status -eq 0 } | Select-Object -First 1)[0].status_description
-    $desc1 = @($items | Where-Object { [int]$_.status -eq 1 } | Select-Object -First 1)[0].status_description
-    $desc2 = @($items | Where-Object { [int]$_.status -eq 2 } | Select-Object -First 1)[0].status_description
-    "0=$desc0, 1=$desc1, 2=$desc2"
+if ($items.Count -eq 0 -or [string]::IsNullOrWhiteSpace([string]$items[0].status_description)) {
+  $latestLegend = ''
+}
+else {
+  $desc0Item = @($items | Where-Object { [int]$_.status -eq 0 } | Select-Object -First 1)
+  $desc1Item = @($items | Where-Object { [int]$_.status -eq 1 } | Select-Object -First 1)
+  $desc2Item = @($items | Where-Object { [int]$_.status -eq 2 } | Select-Object -First 1)
+
+  $desc0 = if ($desc0Item.Count -gt 0) { [string]$desc0Item[0].status_description } else { '' }
+  $desc1 = if ($desc1Item.Count -gt 0) { [string]$desc1Item[0].status_description } else { '' }
+  $desc2 = if ($desc2Item.Count -gt 0) { [string]$desc2Item[0].status_description } else { '' }
+
+  $latestLegend = "0=$desc0, 1=$desc1, 2=$desc2"
 }
 
 $indexHtml = @"
@@ -202,7 +227,7 @@ $indexHtml = @"
   <p class="meta">Generated: $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss') | <a href="history.html">View history</a></p>
 
   <div class="card">
-    <strong>Total items:</strong> $($items.Count)<br/>
+    <strong>Total visible items:</strong> $($items.Count)<br/>
     <strong>Legend:</strong> $(HtmlEncode($latestLegend))
   </div>
 
@@ -244,6 +269,10 @@ foreach ($reportFile in $reportFiles) {
     $reportCreated = [string]$reportObj.created_at
 
     foreach ($removed in @($reportObj.removed)) {
+      if (-not (Is-PublicOptionOrConfirmed -Item $removed)) {
+        continue
+      }
+
         $removedRows += [pscustomobject]@{
             report_created = $reportCreated
             gig_id         = [string]$removed.gig_id
@@ -254,6 +283,10 @@ foreach ($reportFile in $reportFiles) {
     }
 
     foreach ($added in @($reportObj.added)) {
+      if (-not (Is-PublicOptionOrConfirmed -Item $added)) {
+        continue
+      }
+
         $otherChangeRows += [pscustomobject]@{
             report_created = $reportCreated
             gig_id         = [string]$added.gig_id
@@ -264,6 +297,10 @@ foreach ($reportFile in $reportFiles) {
     }
 
     foreach ($changed in @($reportObj.changed)) {
+      if (-not $visibleByGigId.ContainsKey([string]$changed.gig_id)) {
+        continue
+      }
+
         $details = "changed fields: " + [string]$changed.change_count
         $otherChangeRows += [pscustomobject]@{
             report_created = $reportCreated
