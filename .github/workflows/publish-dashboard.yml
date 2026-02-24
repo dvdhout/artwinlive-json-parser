@@ -41,6 +41,60 @@ jobs:
         run: |
           ./scripts/build-web-pages.ps1 -StateDir "./site-data" -DocsDir "./docs"
 
+      - name: Add run summary
+        shell: pwsh
+        run: |
+          $reportsDir = "./site-data/reports"
+          $summaryPath = $env:GITHUB_STEP_SUMMARY
+
+          Add-Content -Path $summaryPath -Value "## Artwin dashboard run"
+          Add-Content -Path $summaryPath -Value ""
+          Add-Content -Path $summaryPath -Value "- Workflow run time (UTC): $(Get-Date -Format 'yyyy-MM-dd HH:mm:ss')"
+
+          if (-not (Test-Path $reportsDir)) {
+            Add-Content -Path $summaryPath -Value "- Reports directory not found: $reportsDir"
+            exit 0
+          }
+
+          $latestReportJson = Get-ChildItem -Path $reportsDir -Filter "change-report-*.json" |
+            Sort-Object LastWriteTime |
+            Select-Object -Last 1
+
+          $latestReportMd = Get-ChildItem -Path $reportsDir -Filter "change-report-*.md" |
+            Sort-Object LastWriteTime |
+            Select-Object -Last 1
+
+          $latestStatusMd = Get-ChildItem -Path $reportsDir -Filter "status-summary-*.md" |
+            Sort-Object LastWriteTime |
+            Select-Object -Last 1
+
+          if ($null -eq $latestReportJson) {
+            Add-Content -Path $summaryPath -Value "- No change-report JSON file found in $reportsDir"
+            exit 0
+          }
+
+          $report = Get-Content -Path $latestReportJson.FullName -Raw | ConvertFrom-Json
+
+          Add-Content -Path $summaryPath -Value ""
+          Add-Content -Path $summaryPath -Value "### Change summary"
+          Add-Content -Path $summaryPath -Value "- Added: $($report.summary.added)"
+          Add-Content -Path $summaryPath -Value "- Removed: $($report.summary.removed)"
+          Add-Content -Path $summaryPath -Value "- Changed: $($report.summary.changed)"
+          Add-Content -Path $summaryPath -Value "- Previous snapshot: $($report.previous_snapshot)"
+          Add-Content -Path $summaryPath -Value "- Current snapshot: $($report.current_snapshot)"
+
+          Add-Content -Path $summaryPath -Value ""
+          Add-Content -Path $summaryPath -Value "### Generated files"
+          Add-Content -Path $summaryPath -Value "- JSON report: $($latestReportJson.Name)"
+
+          if ($null -ne $latestReportMd) {
+            Add-Content -Path $summaryPath -Value "- Markdown report: $($latestReportMd.Name)"
+          }
+
+          if ($null -ne $latestStatusMd) {
+            Add-Content -Path $summaryPath -Value "- Status summary: $($latestStatusMd.Name)"
+          }
+
       - name: Commit and push generated updates
         shell: bash
         run: |
