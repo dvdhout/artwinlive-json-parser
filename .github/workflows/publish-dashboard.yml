@@ -5,6 +5,10 @@ on:
   schedule:
     - cron: '15 * * * *'
 
+concurrency:
+  group: publish-dashboard-main
+  cancel-in-progress: false
+
 permissions:
   contents: write
 
@@ -105,5 +109,17 @@ jobs:
             echo "No changes to commit"
           else
             git commit -m "chore: update dashboard data and pages"
-            git push
+
+            for attempt in 1 2 3; do
+              if git push; then
+                echo "Push succeeded on attempt $attempt"
+                exit 0
+              fi
+
+              echo "Push failed on attempt $attempt; rebasing on origin/main and retrying..."
+              git pull --rebase origin main
+            done
+
+            echo "Push failed after 3 attempts"
+            exit 1
           fi
