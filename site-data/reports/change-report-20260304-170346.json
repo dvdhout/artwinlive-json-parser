@@ -1,0 +1,38 @@
+{
+  "created_at": "2026-03-04 17:03:46",
+  "previous_snapshot": "widget-snapshot-20260304-155902.json",
+  "current_snapshot": "widget-snapshot-20260304-170346.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 0,
+    "removed": 0,
+    "changed": 1
+  },
+  "added": [],
+  "removed": [],
+  "changed": [
+    {
+      "gig_id": "1750274",
+      "title": "24-uurs Solexrace",
+      "date_start": "2026-08-28 18:00:00",
+      "change_count": 3,
+      "diffs": [
+        {
+          "field": "status",
+          "old": "0",
+          "new": "1"
+        },
+        {
+          "field": "title",
+          "old": "Solexrace",
+          "new": "24-uurs Solexrace"
+        },
+        {
+          "field": "venue_name",
+          "old": "Solexrace",
+          "new": "24-UURS SOLEXRACE"
+        }
+      ]
+    }
+  ]
+}
