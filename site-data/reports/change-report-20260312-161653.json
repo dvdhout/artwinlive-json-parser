@@ -1,0 +1,33 @@
+{
+  "created_at": "2026-03-12 16:16:53",
+  "previous_snapshot": "widget-snapshot-20260312-151105.json",
+  "current_snapshot": "widget-snapshot-20260312-161653.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 0,
+    "removed": 0,
+    "changed": 1
+  },
+  "added": [],
+  "removed": [],
+  "changed": [
+    {
+      "gig_id": "1788409",
+      "title": "Wiellerronde Oostvorne",
+      "date_start": "2026-08-06 20:00:00",
+      "change_count": 2,
+      "diffs": [
+        {
+          "field": "venue_name",
+          "old": "Oostvorne",
+          "new": "DORPSPLEIN OOSTVOORNE"
+        },
+        {
+          "field": "venue_city",
+          "old": "Oostvorne",
+          "new": "Oostvoorne"
+        }
+      ]
+    }
+  ]
+}
