@@ -1,0 +1,43 @@
+{
+  "created_at": "2026-03-18 10:13:03",
+  "previous_snapshot": "widget-snapshot-20260318-090847.json",
+  "current_snapshot": "widget-snapshot-20260318-101302.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 0,
+    "removed": 0,
+    "changed": 1
+  },
+  "added": [],
+  "removed": [],
+  "changed": [
+    {
+      "gig_id": "1785906",
+      "title": "",
+      "date_start": "2027-02-05 21:00:00",
+      "change_count": 4,
+      "diffs": [
+        {
+          "field": "date_start",
+          "old": "2027-02-06 21:00:00",
+          "new": "2027-02-05 21:00:00"
+        },
+        {
+          "field": "date_end",
+          "old": "2027-02-07 01:00:00",
+          "new": "2027-02-06 01:00:00"
+        },
+        {
+          "field": "virtual_date_start",
+          "old": "2027-02-06 21:00:00",
+          "new": "2027-02-05 21:00:00"
+        },
+        {
+          "field": "virtual_date_end",
+          "old": "2027-02-06 01:00:00",
+          "new": "2027-02-05 01:00:00"
+        }
+      ]
+    }
+  ]
+}
