@@ -1,0 +1,33 @@
+{
+  "created_at": "2026-03-23 10:17:15",
+  "previous_snapshot": "widget-snapshot-20260323-091424.json",
+  "current_snapshot": "widget-snapshot-20260323-101715.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 1,
+    "removed": 0,
+    "changed": 0
+  },
+  "added": [
+    {
+      "gig_id": "1793816",
+      "schedule_id": "1316",
+      "schedule_name": "LEKKE BAND",
+      "date_start": "2027-02-09 14:00:00",
+      "date_end": "2027-02-09 17:00:00",
+      "virtual_date_start": "2027-02-09 14:00:00",
+      "virtual_date_end": "2027-02-09 17:00:00",
+      "publish_date": "2026-03-06 12:00:00",
+      "change_date": "2026-03-05 10:14:00",
+      "status": 1,
+      "status_description": "Confirmed",
+      "private": 0,
+      "title": "Carnaval '27",
+      "venue_name": "CARNAVALS ARENA",
+      "venue_city": "Wamel",
+      "venue_country": "NL"
+    }
+  ],
+  "removed": [],
+  "changed": []
+}
