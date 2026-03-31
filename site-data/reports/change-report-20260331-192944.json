@@ -1,0 +1,33 @@
+{
+  "created_at": "2026-03-31 19:29:45",
+  "previous_snapshot": "widget-snapshot-20260331-171527.json",
+  "current_snapshot": "widget-snapshot-20260331-192944.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 1,
+    "removed": 0,
+    "changed": 0
+  },
+  "added": [
+    {
+      "gig_id": "1809377",
+      "schedule_id": "1316",
+      "schedule_name": "LEKKE BAND",
+      "date_start": "2026-04-29 00:00:00",
+      "date_end": "2026-05-17 23:59:00",
+      "virtual_date_start": "2026-04-28 00:00:00",
+      "virtual_date_end": "2026-05-17 23:59:00",
+      "publish_date": "2026-04-01 12:00:00",
+      "change_date": "2026-03-31 17:43:27",
+      "status": 2,
+      "status_description": "Appointment",
+      "private": 1,
+      "title": "Blok Lekke Band",
+      "venue_name": "",
+      "venue_city": "",
+      "venue_country": ""
+    }
+  ],
+  "removed": [],
+  "changed": []
+}
