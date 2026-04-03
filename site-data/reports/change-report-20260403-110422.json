@@ -1,0 +1,28 @@
+{
+  "created_at": "2026-04-03 11:04:22",
+  "previous_snapshot": "widget-snapshot-20260403-100456.json",
+  "current_snapshot": "widget-snapshot-20260403-110422.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 0,
+    "removed": 0,
+    "changed": 1
+  },
+  "added": [],
+  "removed": [],
+  "changed": [
+    {
+      "gig_id": "1798373",
+      "title": "ZOMERFEESTEN GORINCHEM",
+      "date_start": "2026-08-27 20:00:00",
+      "change_count": 1,
+      "diffs": [
+        {
+          "field": "status",
+          "old": "0",
+          "new": "1"
+        }
+      ]
+    }
+  ]
+}
