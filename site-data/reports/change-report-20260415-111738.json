@@ -1,0 +1,33 @@
+{
+  "created_at": "2026-04-15 11:17:39",
+  "previous_snapshot": "widget-snapshot-20260415-095131.json",
+  "current_snapshot": "widget-snapshot-20260415-111738.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 1,
+    "removed": 0,
+    "changed": 0
+  },
+  "added": [
+    {
+      "gig_id": "1815350",
+      "schedule_id": "1316",
+      "schedule_name": "LEKKE BAND",
+      "date_start": "2026-09-26 21:00:00",
+      "date_end": "2026-09-27 01:00:00",
+      "virtual_date_start": "2026-09-26 21:00:00",
+      "virtual_date_end": "2026-09-26 01:00:00",
+      "publish_date": "2026-04-16 12:00:00",
+      "change_date": "2026-04-15 09:37:00",
+      "status": 0,
+      "status_description": "Tentative",
+      "private": 0,
+      "title": "",
+      "venue_name": "ONBEKENDE CREDITEUR",
+      "venue_city": "onbekend",
+      "venue_country": "NL"
+    }
+  ],
+  "removed": [],
+  "changed": []
+}
