@@ -1,0 +1,52 @@
+{
+  "created_at": "2026-04-17 09:49:01",
+  "previous_snapshot": "widget-snapshot-20260417-080711.json",
+  "current_snapshot": "widget-snapshot-20260417-094901.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 1,
+    "removed": 0,
+    "changed": 1
+  },
+  "added": [
+    {
+      "gig_id": "1816399",
+      "schedule_id": "1316",
+      "schedule_name": "LEKKE BAND",
+      "date_start": "2026-06-27 00:00:00",
+      "date_end": "2026-06-28 00:00:00",
+      "virtual_date_start": "2026-06-27 00:00:00",
+      "virtual_date_end": "2026-06-28 00:00:00",
+      "publish_date": "2026-04-18 12:00:00",
+      "change_date": "2026-04-17 09:40:21",
+      "status": 2,
+      "status_description": "Appointment",
+      "private": 1,
+      "title": "Blok Peter",
+      "venue_name": "",
+      "venue_city": "",
+      "venue_country": ""
+    }
+  ],
+  "removed": [],
+  "changed": [
+    {
+      "gig_id": "1720100",
+      "title": "Blok Peter",
+      "date_start": "2026-07-12 00:00:00",
+      "change_count": 2,
+      "diffs": [
+        {
+          "field": "title",
+          "old": "Blokkade Peter",
+          "new": "Blok Peter"
+        },
+        {
+          "field": "change_date",
+          "old": "2025-09-22 14:16:53",
+          "new": "2026-04-17 09:40:35"
+        }
+      ]
+    }
+  ]
+}
