@@ -1,0 +1,51 @@
+{
+  "created_at": "2026-05-18 00:12:58",
+  "previous_snapshot": "widget-snapshot-20260517-231251.json",
+  "current_snapshot": "widget-snapshot-20260518-001258.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 0,
+    "removed": 2,
+    "changed": 0
+  },
+  "added": [],
+  "removed": [
+    {
+      "gig_id": "1809377",
+      "schedule_id": "1316",
+      "schedule_name": "LEKKE BAND",
+      "date_start": "2026-04-29 00:00:00",
+      "date_end": "2026-05-17 23:59:00",
+      "virtual_date_start": "2026-04-28 00:00:00",
+      "virtual_date_end": "2026-05-17 23:59:00",
+      "publish_date": "2026-04-01 12:00:00",
+      "change_date": "2026-03-31 17:43:27",
+      "status": 2,
+      "status_description": "Appointment",
+      "private": 1,
+      "title": "Blok Lekke Band",
+      "venue_name": "",
+      "venue_city": "",
+      "venue_country": ""
+    },
+    {
+      "gig_id": "1709049",
+      "schedule_id": "1316",
+      "schedule_name": "LEKKE BAND",
+      "date_start": "2026-05-13 01:00:00",
+      "date_end": "2026-05-17 23:59:00",
+      "virtual_date_start": "2026-05-12 01:00:00",
+      "virtual_date_end": "2026-05-17 23:59:00",
+      "publish_date": "2025-08-29 12:00:00",
+      "change_date": "2025-08-28 19:24:41",
+      "status": 2,
+      "status_description": "Appointment",
+      "private": 1,
+      "title": "Bart blok",
+      "venue_name": "",
+      "venue_city": "",
+      "venue_country": ""
+    }
+  ],
+  "changed": []
+}
