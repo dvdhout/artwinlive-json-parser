@@ -1,0 +1,33 @@
+{
+  "created_at": "2026-06-10 11:04:39",
+  "previous_snapshot": "widget-snapshot-20260610-064325.json",
+  "current_snapshot": "widget-snapshot-20260610-110439.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 1,
+    "removed": 0,
+    "changed": 0
+  },
+  "added": [
+    {
+      "gig_id": "1838936",
+      "schedule_id": "1316",
+      "schedule_name": "LEKKE BAND",
+      "date_start": "2026-10-16 21:00:00",
+      "date_end": "2026-10-17 01:00:00",
+      "virtual_date_start": "2026-10-16 21:00:00",
+      "virtual_date_end": "2026-10-16 01:00:00",
+      "publish_date": "2026-06-11 12:00:00",
+      "change_date": "2026-06-10 08:36:00",
+      "status": 0,
+      "status_description": "Tentative",
+      "private": 0,
+      "title": "Oktoberfeest",
+      "venue_name": "Wijk en Aalburg",
+      "venue_city": "Wijk en Aalburg",
+      "venue_country": "NL"
+    }
+  ],
+  "removed": [],
+  "changed": []
+}
