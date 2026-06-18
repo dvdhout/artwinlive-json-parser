@@ -1,0 +1,51 @@
+{
+  "created_at": "2026-06-18 23:10:27",
+  "previous_snapshot": "widget-snapshot-20260618-203911.json",
+  "current_snapshot": "widget-snapshot-20260618-231027.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 2,
+    "removed": 0,
+    "changed": 0
+  },
+  "added": [
+    {
+      "gig_id": "1844359",
+      "schedule_id": "1316",
+      "schedule_name": "LEKKE BAND",
+      "date_start": "2026-10-03 00:00:00",
+      "date_end": "2026-10-04 00:00:00",
+      "virtual_date_start": "2026-10-03 00:00:00",
+      "virtual_date_end": "2026-10-04 00:00:00",
+      "publish_date": "2026-06-19 12:00:00",
+      "change_date": "2026-06-18 21:11:38",
+      "status": 2,
+      "status_description": "Appointment",
+      "private": 1,
+      "title": "Blok Geert",
+      "venue_name": "",
+      "venue_city": "",
+      "venue_country": ""
+    },
+    {
+      "gig_id": "1844360",
+      "schedule_id": "1316",
+      "schedule_name": "LEKKE BAND",
+      "date_start": "2026-10-04 00:00:00",
+      "date_end": "2026-10-05 00:00:00",
+      "virtual_date_start": "2026-10-04 00:00:00",
+      "virtual_date_end": "2026-10-05 00:00:00",
+      "publish_date": "2026-06-19 12:00:00",
+      "change_date": "2026-06-18 21:12:30",
+      "status": 2,
+      "status_description": "Appointment",
+      "private": 1,
+      "title": "Blok Geert",
+      "venue_name": "",
+      "venue_city": "",
+      "venue_country": ""
+    }
+  ],
+  "removed": [],
+  "changed": []
+}
