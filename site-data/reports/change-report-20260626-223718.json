@@ -1,0 +1,28 @@
+{
+  "created_at": "2026-06-26 22:37:19",
+  "previous_snapshot": "widget-snapshot-20260626-205542.json",
+  "current_snapshot": "widget-snapshot-20260626-223718.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 0,
+    "removed": 0,
+    "changed": 1
+  },
+  "added": [],
+  "removed": [],
+  "changed": [
+    {
+      "gig_id": "1833916",
+      "title": "",
+      "date_start": "2026-07-04 00:00:00",
+      "change_count": 1,
+      "diffs": [
+        {
+          "field": "publish_date",
+          "old": "2026-06-20 12:00:00",
+          "new": "2026-06-27 12:00:00"
+        }
+      ]
+    }
+  ]
+}
