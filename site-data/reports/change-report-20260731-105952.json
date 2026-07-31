@@ -1,0 +1,14 @@
+{
+  "created_at": "2026-07-31 10:59:52",
+  "previous_snapshot": "widget-snapshot-20260731-080956.json",
+  "current_snapshot": "widget-snapshot-20260731-105952.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 0,
+    "removed": 0,
+    "changed": 0
+  },
+  "added": [],
+  "removed": [],
+  "changed": []
+}
