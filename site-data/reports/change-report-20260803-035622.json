@@ -1,0 +1,33 @@
+{
+  "created_at": "2026-08-03 03:56:22",
+  "previous_snapshot": "widget-snapshot-20260802-231519.json",
+  "current_snapshot": "widget-snapshot-20260803-035622.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 0,
+    "removed": 1,
+    "changed": 0
+  },
+  "added": [],
+  "removed": [
+    {
+      "gig_id": "1736027",
+      "schedule_id": "1316",
+      "schedule_name": "LEKKE BAND",
+      "date_start": "2026-07-20 00:00:00",
+      "date_end": "2026-08-02 23:59:00",
+      "virtual_date_start": "2026-07-19 00:00:00",
+      "virtual_date_end": "2026-08-02 23:59:00",
+      "publish_date": "2025-10-28 12:00:00",
+      "change_date": "2026-01-25 20:13:02",
+      "status": 2,
+      "status_description": "Appointment",
+      "private": 1,
+      "title": "Blok Dennis zomervakantie",
+      "venue_name": "",
+      "venue_city": "",
+      "venue_country": ""
+    }
+  ],
+  "changed": []
+}
