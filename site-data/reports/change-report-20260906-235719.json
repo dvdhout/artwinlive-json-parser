@@ -1,0 +1,33 @@
+{
+  "created_at": "2026-09-06 23:57:19",
+  "previous_snapshot": "widget-snapshot-20260906-212615.json",
+  "current_snapshot": "widget-snapshot-20260906-235719.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 0,
+    "removed": 1,
+    "changed": 0
+  },
+  "added": [],
+  "removed": [
+    {
+      "gig_id": "1822554",
+      "schedule_id": "1316",
+      "schedule_name": "LEKKE BAND",
+      "date_start": "2026-09-04 17:00:00",
+      "date_end": "2026-09-06 23:00:00",
+      "virtual_date_start": "2026-09-04 17:00:00",
+      "virtual_date_end": "2026-09-06 23:00:00",
+      "publish_date": "2026-05-03 12:00:00",
+      "change_date": "2026-05-02 17:37:48",
+      "status": 2,
+      "status_description": "Appointment",
+      "private": 1,
+      "title": "Bjorn Vakantie",
+      "venue_name": "",
+      "venue_city": "",
+      "venue_country": ""
+    }
+  ],
+  "changed": []
+}
