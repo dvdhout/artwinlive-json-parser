@@ -1,0 +1,28 @@
+{
+  "created_at": "2026-10-01 13:22:21",
+  "previous_snapshot": "widget-snapshot-20261001-060044.json",
+  "current_snapshot": "widget-snapshot-20261001-132221.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 0,
+    "removed": 0,
+    "changed": 1
+  },
+  "added": [],
+  "removed": [],
+  "changed": [
+    {
+      "gig_id": "1947027",
+      "title": "Kermis, Beugen",
+      "date_start": "2027-07-03 00:00:00",
+      "change_count": 1,
+      "diffs": [
+        {
+          "field": "venue_name",
+          "old": "Beugen",
+          "new": "EVENEMENTENTERREIN BEUGEN"
+        }
+      ]
+    }
+  ]
+}
