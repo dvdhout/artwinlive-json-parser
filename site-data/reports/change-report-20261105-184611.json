@@ -1,0 +1,48 @@
+{
+  "created_at": "2026-11-05 18:46:11",
+  "previous_snapshot": "widget-snapshot-20261105-110002.json",
+  "current_snapshot": "widget-snapshot-20261105-184611.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 0,
+    "removed": 0,
+    "changed": 1
+  },
+  "added": [],
+  "removed": [],
+  "changed": [
+    {
+      "gig_id": "1947027",
+      "title": "Kermis, Beugen",
+      "date_start": "2027-07-03 22:30:00",
+      "change_count": 5,
+      "diffs": [
+        {
+          "field": "date_start",
+          "old": "2027-07-03 00:00:00",
+          "new": "2027-07-03 22:30:00"
+        },
+        {
+          "field": "date_end",
+          "old": "2027-07-04 00:00:00",
+          "new": "2027-07-04 01:00:00"
+        },
+        {
+          "field": "virtual_date_start",
+          "old": "2027-07-03 00:00:00",
+          "new": "2027-07-03 22:30:00"
+        },
+        {
+          "field": "virtual_date_end",
+          "old": "2027-07-04 00:00:00",
+          "new": "2027-07-03 01:00:00"
+        },
+        {
+          "field": "status",
+          "old": "0",
+          "new": "1"
+        }
+      ]
+    }
+  ]
+}
