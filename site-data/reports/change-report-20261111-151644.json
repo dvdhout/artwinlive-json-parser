@@ -1,0 +1,38 @@
+{
+  "created_at": "2026-11-11 15:16:45",
+  "previous_snapshot": "widget-snapshot-20261111-063029.json",
+  "current_snapshot": "widget-snapshot-20261111-151644.json",
+  "legend": "0=Tentative, 1=Confirmed, 2=Appointment",
+  "summary": {
+    "added": 0,
+    "removed": 0,
+    "changed": 1
+  },
+  "added": [],
+  "removed": [],
+  "changed": [
+    {
+      "gig_id": "1974370",
+      "title": "Feest",
+      "date_start": "2027-09-11 21:00:00",
+      "change_count": 3,
+      "diffs": [
+        {
+          "field": "date_start",
+          "old": "2027-09-11 20:00:00",
+          "new": "2027-09-11 21:00:00"
+        },
+        {
+          "field": "virtual_date_start",
+          "old": "2027-09-11 20:00:00",
+          "new": "2027-09-11 21:00:00"
+        },
+        {
+          "field": "status",
+          "old": "0",
+          "new": "1"
+        }
+      ]
+    }
+  ]
+}
